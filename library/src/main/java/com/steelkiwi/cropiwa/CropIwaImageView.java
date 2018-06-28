@@ -430,7 +430,7 @@ class CropIwaImageView extends AppCompatImageView implements OnNewBoundsListener
                     return;
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
-                    animateToAllowedBounds();
+                    //animateToAllowedBounds();
                     return;
             }
 
