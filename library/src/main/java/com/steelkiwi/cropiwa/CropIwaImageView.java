@@ -214,10 +214,18 @@ class CropIwaImageView extends AppCompatImageView implements OnNewBoundsListener
         }
     }
 
-    private void rotateImage(float rotation) {
+    private void rotateImage(float rotation, float px, float py) {
         float deltaX = imageBounds.centerX();
         float deltaY = imageBounds.centerY();
-        imageMatrix.postRotate(rotation, deltaX, deltaY);
+
+        if(rotation > 2) {
+            rotation = 2;
+        }
+        if(rotation < -2) {
+            rotation = -2;
+        }
+
+        imageMatrix.postRotate(rotation, px, py);
         setImageMatrix(imageMatrix);
         updateImageBounds();
     }
@@ -379,7 +387,7 @@ class CropIwaImageView extends AppCompatImageView implements OnNewBoundsListener
 
                         angle = angleBetweenLines(fX, fY, sX, sY, nfX, nfY, nsX, nsY);
 
-                        rotateImage(angle / 20);
+                        rotateImage(angle / 20, event.getX(), event.getY());
                     }
                     break;
                 case MotionEvent.ACTION_UP:
