@@ -1,6 +1,7 @@
 package com.steelkiwi.cropiwa.image;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -38,12 +39,70 @@ public class CropArea {
     public Bitmap applyCropTo(Bitmap bitmap) {
         bitmap = rotateBitmap(bitmap, croppedMatrix);
 
+        int x = findRealCoordinate(bitmap.getWidth(), cropRect.left, imageRect.width());
+        int y = findRealCoordinate(bitmap.getHeight(), cropRect.top, imageRect.height());
+        int width = findRealCoordinate(bitmap.getWidth(), cropRect.width(), imageRect.width());
+        int height = findRealCoordinate(bitmap.getHeight(), cropRect.height(), imageRect.height());
+
+        int sx = 0;
+        int sy = 0;
+
+        if (x < 0) {
+            sx = -x;
+
+            width += x;
+            x = 0;
+        }
+        if (y < 0) {
+            sy = -y;
+
+            height += y;
+            y = 0;
+        }
+        if(x + width > bitmap.getWidth()) {
+            width = bitmap.getWidth() - x;
+        }
+        if(y + height > bitmap.getHeight()) {
+            height = bitmap.getHeight() - y;
+        }
+
         Bitmap immutableCropped = Bitmap.createBitmap(bitmap,
-                findRealCoordinate(bitmap.getWidth(), cropRect.left, imageRect.width()),
-                findRealCoordinate(bitmap.getHeight(), cropRect.top, imageRect.height()),
-                findRealCoordinate(bitmap.getWidth(), cropRect.width(), imageRect.width()),
-                findRealCoordinate(bitmap.getHeight(), cropRect.height(), imageRect.height()));
-        return immutableCropped.copy(immutableCropped.getConfig(), true);
+                x,
+                y,
+                width,
+                height);
+
+        Bitmap cover = Bitmap.createBitmap(cropRect.width(), cropRect.height(), Bitmap.Config.ARGB_8888);
+
+        Bitmap finalBmp = combineImages(cover, immutableCropped, sx, sy);
+
+        return finalBmp.copy(finalBmp.getConfig(), true);
+    }
+
+    public Bitmap combineImages(Bitmap c, Bitmap s, int sx, int sy) {
+        Bitmap cs = null;
+
+        int width, height = 0;
+
+        /*if(c.getWidth() > s.getWidth()) {
+            width = c.getWidth() + s.getWidth();
+            height = c.getHeight();
+        } else {
+            width = s.getWidth() + s.getWidth();
+            height = c.getHeight();
+        }*/
+
+        width = c.getWidth();
+        height = c.getHeight();
+
+        cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        Canvas comboImage = new Canvas(cs);
+
+        comboImage.drawBitmap(c, 0f, 0f, null);
+        comboImage.drawBitmap(s, sx, sy, null);
+
+        return cs;
     }
 
     public Bitmap rotateBitmap(Bitmap source, Matrix matrix)
