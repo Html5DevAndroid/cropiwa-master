@@ -98,6 +98,14 @@ public class CropIwaView extends FrameLayout {
         addView(overlayView);
     }
 
+    public CropIwaImageView getImageView() {
+        return imageView;
+    }
+
+    public CropIwaOverlayView getOverlayView() {
+        return overlayView;
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
