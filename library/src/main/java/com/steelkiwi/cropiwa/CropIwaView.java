@@ -98,12 +98,8 @@ public class CropIwaView extends FrameLayout {
         addView(overlayView);
     }
 
-    public CropIwaImageView getImageView() {
-        return imageView;
-    }
-
-    public CropIwaOverlayView getOverlayView() {
-        return overlayView;
+    public int getOverlayWidth() {
+        return imageView.getWidth();
     }
 
     @Override
