@@ -48,7 +48,7 @@ class CropImageTask extends AsyncTask<Void, Void, Throwable> {
 
             Bitmap cropped = cropArea.applyCropTo(bitmap);
 
-            cropped = mask.applyMaskTo(cropped);
+            cropped = mask.applyMaskTo(Bitmap.createBitmap(cropped));
 
             Uri dst = saveConfig.getDstUri();
             OutputStream os = context.getContentResolver().openOutputStream(dst);
