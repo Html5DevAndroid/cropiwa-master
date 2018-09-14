@@ -72,11 +72,12 @@ public class CropArea {
                 width,
                 height);
 
-        /*Bitmap cover = Bitmap.createBitmap(cropRect.width(), cropRect.height(), Bitmap.Config.ARGB_8888);
+        Bitmap cover = Bitmap.createBitmap(cropRect.width(), cropRect.height(), Bitmap.Config.ARGB_8888);
 
-        Bitmap finalBmp = combineImages(cover, immutableCropped, sx, sy);*/
+        //Bitmap finalBmp = combineImages(cover, immutableCropped, sx, sy);
+        Bitmap finalBmp = null;
 
-        return immutableCropped;
+        return finalBmp.copy(immutableCropped.getConfig(), true);
     }
 
     public Bitmap combineImages(Bitmap c, Bitmap s, int sx, int sy) {
