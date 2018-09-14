@@ -74,8 +74,7 @@ public class CropArea {
 
         Bitmap cover = Bitmap.createBitmap(cropRect.width(), cropRect.height(), Bitmap.Config.ARGB_8888);
 
-        //Bitmap finalBmp = combineImages(cover, immutableCropped, sx, sy);
-        Bitmap finalBmp = null;
+        Bitmap finalBmp = combineImages(cover, immutableCropped, sx, sy);
 
         return finalBmp.copy(immutableCropped.getConfig(), true);
     }
