@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 /**
  * @author yarolegovich
@@ -103,7 +104,19 @@ public class CropArea {
 
     public Bitmap rotateBitmap(Bitmap source, Matrix matrix)
     {
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+        RectF rect = new RectF(0, 0, source.getWidth(), source.getHeight());
+        matrix.mapRect(rect);
+
+        float ratio = rect.height()/rect.width();
+        float scale = source.getWidth()/rect.width();
+        matrix.postTranslate(-rect.left, -rect.top);
+        matrix.postScale(scale, scale, 0, 0);
+
+        Bitmap bitmap = Bitmap.createBitmap(source.getWidth(), (int) (source.getWidth()*ratio), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(source, matrix, null);
+        source.recycle();
+        return bitmap;
     }
 
     private int findRealCoordinate(int imageRealSize, int cropCoordinate, float cropImageSize) {
